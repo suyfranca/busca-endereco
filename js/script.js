@@ -4,8 +4,8 @@
   const $inputCep = document.querySelector('[data-js="input-cep"]');
   const $button = document.querySelector('[data-js="btn"]');
   const $status = document.querySelector('[data-js="status"]');
+  const $cepInfo = document.querySelector('[data-js="cep-info"]');
 
-  const $span = document.getElementsByTagName('span');
   const $logradouro = document.querySelector('[data-js="logradouro"]');
   const $bairro = document.querySelector('[data-js="bairro"]');
   const $estado = document.querySelector('[data-js="estado"]');
@@ -19,13 +19,23 @@
     if ($inputCep.value == '') return getMessage('warning');
     let url = getUrl();
     const cep = fetch(url);
+    getMessage('loading');
     cep
       .then((r) => r.json())
       .then((data) => {
-        console.log(data);
+        if (data === undefined || data.erro === true) {
+          return errorPage(data);
+        }
         fillForm(data);
-      });
-    getMessage('loading');
+      })
+      .catch((error) => errorPage());
+  }
+
+  function errorPage() {
+    if ($cepInfo.firstElementChild) {
+      cleanField();
+    }
+    getMessage('error');
   }
 
   function getUrl() {
@@ -34,15 +44,14 @@
 
   function clearCEP() {
     let cepCleaned = $inputCep.value.replace(/\D/g, '');
-    console.log(cepCleaned);
     return cepCleaned;
   }
 
   function fillForm(data) {
     if (data.erro) {
-      return getMessage(error);
+      return getMessage('error');
     }
-    cleanField();
+    $cepInfo.style.display = 'block';
     getMessage('ok');
     $logradouro.textContent = data.logradouro;
     $bairro.textContent = data.bairro;
@@ -52,9 +61,7 @@
   }
 
   function cleanField() {
-    Array.prototype.forEach.call($span, function (item) {
-      item.textContent = '';
-    });
+    $cepInfo.style.display = 'none';
   }
 
   function getMessage(type) {
@@ -62,7 +69,7 @@
     let messages = {
       loading: `Buscando informações para o CEP ${cep}...`,
       ok: `Endereço referente ao CEP ${cep}:`,
-      error: `Não encontramos o endereço para o CEP ${cep}.`,
+      error: `Não encontramos endereço para o CEP ${cep}.`,
       warning: 'Digite um CEP',
     };
     $status.textContent = messages[type];
