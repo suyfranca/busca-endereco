@@ -13,6 +13,7 @@
   const $cep = document.querySelector('[data-js="cep"]');
 
   $button.addEventListener('click', searchCep, false);
+  $inputCep.focus();
 
   function searchCep(e) {
     e.preventDefault();
