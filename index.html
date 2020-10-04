@@ -12,22 +12,25 @@
   </head>
 
   <body>
-    <header>
-      <img src="img/mapa.png" alt="ícone Consulta CEP" class="icon" />
-    </header>
 
-    <section>
+    <div id="custom-bg"></div>
+    <header>
       <div class="title">
         <h1>Busca endereço</h1>
         <p class="subtitle">
-          Navegue para o endereço que você procura.
+          Navegue para o endereço que você procura
         </p>
       </div>
+    </header>
+    <section>
       <form action="#" method="GET" class="form" data-js="form-cep">
         <div class="form__container">
           <div class="form__content">
             <input type="text" name="inputCep" data-js="input-cep" value="" />
-            <button type="submit" data-js="btn">Consultar CEP</button>
+            <div class="buttons">
+              <button type="submit" class="main-btn" data-js="btn">Consultar CEP</button>
+              <button type="reset" data-js="">Limpar campo</button>
+            </div>
             <div class="form__status" data-js="form-status">
               <h3 data-js="status"></h3>
             </div>
